@@ -7,7 +7,7 @@ export default function WordPad () {
     value: string
     status: letterType
   }
-  type gameStatus = 'won' | 'playing' | 'lost'
+  // type gameStatus = 'won' | 'playing' | 'lost'
   type Word = Letter[]
   // const noOfTries = 5
   const toast = useToast()

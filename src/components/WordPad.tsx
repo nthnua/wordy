@@ -24,23 +24,32 @@ export default function WordPad() {
     status: 'unknown'
   })
   const [triedWords, setTriedWords] = useState<Word[]>([initialLetters])
-  const PastTries = triedWords.map((word: Word, indx) => {
+  const PastTries = triedWords.map((word: Word, indx: number) => {
     let w = ''
     word.forEach(({ value }) => { w = w + value })
     return (
       <HStack>
         <PinInput size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
-            if (word.length === wordLength) {
+            if (word.length === wordLength && word!==correctWord) {
               const procWord: Word = word.split('').map((letter, indx) => ({
                   value: letter,
-                  status: correctWord[indx] === letter && 'correct' || correctWord.includes(letter) && 'existent' || 'incorrect'
+                  status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
               }))
               console.log(Array(word))
               let updWords: Word[] = [...triedWords]
               updWords[currentTry] = procWord
               setTriedWords([...updWords, initialLetters])
               setCurrentTry(currentTry + 1)
+            }
+            else if(word===correctWord){
+              const procWord: Word = word.split('').map((letter, indx) => ({
+                value: letter,
+                status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
+            }))
+            let updWords: Word[] = [...triedWords]
+            updWords[currentTry] = procWord
+            setTriedWords([...updWords])
             }
           }}
         >

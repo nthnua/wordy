@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Heading, HStack, PinInput, PinInputField, useDisclosure, useToast, VStack } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Heading, HStack, PinInput, PinInputField, Text, useDisclosure, useToast, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 export default function WordPad () {
@@ -84,7 +84,8 @@ export default function WordPad () {
   useEffect(() => {
     if(wordList.length){
       const index = Math.floor(Math.random() * 3427)
-      setCorrectWord(wordList[index])
+      //setCorrectWord(wordList[index])
+      setCorrectWord('HELLO')
     }
   }, [wordList])
   return (
@@ -92,9 +93,11 @@ export default function WordPad () {
       <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>
         <AlertDialogOverlay />
         <AlertDialogContent>
-          <AlertDialogHeader fontSize='xx-large'>You won!!!🥳🥳🥳🥳</AlertDialogHeader>
+          <AlertDialogHeader fontSize='xx-large'>You won!!!🥳🥳🥳🥳
+          </AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
+            <Text fontSize='xl' fontWeight='bold' >No. of tries: {triedWords.length}</Text>
             Come back tomorrow for a new word.
           </AlertDialogBody>
           <AlertDialogFooter />

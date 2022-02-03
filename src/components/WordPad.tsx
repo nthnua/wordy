@@ -37,7 +37,7 @@ export default function WordPad () {
         <PinInput
           size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
-            word = word.toLowerCase()
+            word = word.toUpperCase()
             if (word.length === wordLength && word !== correctWord) {
               if (wordList.includes(word)) {
                 const procWord: Word = word.split('').map((letter, indx) => ({
@@ -82,8 +82,10 @@ export default function WordPad () {
     })).catch(err => console.error(err))
   }, [])
   useEffect(() => {
-    const index = Math.floor(Math.random() * 3427)
-    setCorrectWord(wordList[index])
+    if(wordList.length){
+      const index = Math.floor(Math.random() * 3427)
+      setCorrectWord(wordList[index])
+    }
   }, [wordList])
   return (
     <>

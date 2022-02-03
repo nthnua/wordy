@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Heading, HStack, PinInput, PinInputField, useDisclosure, VStack } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Heading, HStack, PinInput, PinInputField, useDisclosure, useToast, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 
@@ -11,7 +11,9 @@ export default function WordPad() {
   type gameStatus = 'won' | 'playing' | 'lost'
   type Word = Letter[]
   const noOfTries = 5
+  const toast = useToast()
   const [gameState,setGameState] = useState<gameStatus>('playing')
+  const [wordList,setWordList] = useState<string[]>([])
   const [correctWord,setCorrectWord] = useState<string>('')
   const [currentTry, setCurrentTry] = useState<number>(0)
   const wordLength = 5
@@ -32,11 +34,12 @@ export default function WordPad() {
     let w = ''
     word.forEach(({ value }) => { w = w + value })
     return (
-      <HStack>
+      <HStack key={indx}>
         <PinInput size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
             if (word.length === wordLength && word!==correctWord) {
-              const procWord: Word = word.split('').map((letter, indx) => ({
+              if(wordList.includes(word)){
+                const procWord: Word = word.split('').map((letter, indx) => ({
                   value: letter,
                   status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
               }))
@@ -44,7 +47,16 @@ export default function WordPad() {
               updWords[currentTry] = procWord
               setTriedWords([...updWords, initialLetters])
               setCurrentTry(currentTry + 1)
-              
+              }
+              else{
+                toast.closeAll()
+                toast({
+                  variant:'subtle',
+                  description:'Word not in the list😕',
+                  status:'warning',
+                  duration: 1000
+                })
+              }
             }
             else if(word===correctWord){
               const procWord: Word = word.split('').map((letter, indx) => ({
@@ -67,10 +79,13 @@ export default function WordPad() {
   )
   useEffect(()=>{
     fetch('words.txt').then((t)=>t.text().then((wordsTxt)=>{
-      const index = Math.floor(Math.random()*928)
-      setCorrectWord(wordsTxt.split('\n')[index])
+      setWordList(wordsTxt.split('\n'))
     })).catch(err=>console.error(err))
   },[])
+  useEffect(()=>{
+    const index = Math.floor(Math.random()*3427)
+    setCorrectWord(wordList[index])
+  },[wordList])
   return (
     <>
     <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>

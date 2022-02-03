@@ -9,7 +9,7 @@ import WordPad from './components/WordPad'
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Center minH='100vh' my='24'>
+    <Center minH='100vh' py='24'>
       <WordPad />
     </Center>
   </ChakraProvider>

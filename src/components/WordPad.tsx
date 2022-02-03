@@ -1,5 +1,6 @@
 import { HStack, PinInput, PinInputField, VStack } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
 
 export default function WordPad() {
   type letterType = 'correct' | 'incorrect' | 'unknown' | 'existent'
@@ -9,9 +10,9 @@ export default function WordPad() {
   }
   type Word = Letter[]
   const noOfTries = 5
+  const [correctWord,setCorrectWord] = useState<string>('')
   const [currentTry, setCurrentTry] = useState<number>(0)
   const wordLength = 5
-  const correctWord = 'hello'
   // colormap
   const colorCode = {
     correct: 'green.200',
@@ -60,6 +61,12 @@ export default function WordPad() {
     )
   }
   )
+  useEffect(()=>{
+    fetch('words.txt').then((t)=>t.text().then((wordsTxt)=>{
+      const index = Math.floor(Math.random()*928)
+      setCorrectWord(wordsTxt.split('\n')[index])
+    })).catch(err=>console.error(err))
+  },[])
   return (
     <VStack transitionDuration='2s'>
       {PastTries}

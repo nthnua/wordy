@@ -50,6 +50,7 @@ export default function WordPad() {
             let updWords: Word[] = [...triedWords]
             updWords[currentTry] = procWord
             setTriedWords([...updWords])
+            setCurrentTry(-1)
             }
           }}
         >

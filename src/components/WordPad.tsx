@@ -37,6 +37,7 @@ export default function WordPad () {
         <PinInput
           size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
+            word = word.toLowerCase()
             if (word.length === wordLength && word !== correctWord) {
               if (wordList.includes(word)) {
                 const procWord: Word = word.split('').map((letter, indx) => ({

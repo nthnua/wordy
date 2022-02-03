@@ -37,11 +37,11 @@ export default function WordPad() {
                   value: letter,
                   status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
               }))
-              console.log(Array(word))
               let updWords: Word[] = [...triedWords]
               updWords[currentTry] = procWord
               setTriedWords([...updWords, initialLetters])
               setCurrentTry(currentTry + 1)
+              
             }
             else if(word===correctWord){
               const procWord: Word = word.split('').map((letter, indx) => ({

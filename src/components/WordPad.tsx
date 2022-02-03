@@ -1,4 +1,4 @@
-import { HStack, PinInput, PinInputField, VStack } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Heading, HStack, PinInput, PinInputField, useDisclosure, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 
@@ -8,11 +8,14 @@ export default function WordPad() {
     value: string
     status: letterType
   }
+  type gameStatus = 'won' | 'playing' | 'lost'
   type Word = Letter[]
   const noOfTries = 5
+  const [gameState,setGameState] = useState<gameStatus>('playing')
   const [correctWord,setCorrectWord] = useState<string>('')
   const [currentTry, setCurrentTry] = useState<number>(0)
   const wordLength = 5
+  const { isOpen, onOpen, onClose } = useDisclosure()
   // colormap
   const colorCode = {
     correct: 'green.200',
@@ -52,6 +55,7 @@ export default function WordPad() {
             updWords[currentTry] = procWord
             setTriedWords([...updWords])
             setCurrentTry(-1)
+            onOpen()
             }
           }}
         >
@@ -68,8 +72,23 @@ export default function WordPad() {
     })).catch(err=>console.error(err))
   },[])
   return (
-    <VStack transitionDuration='2s'>
+    <>
+    <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>
+    <AlertDialogOverlay />
+    <AlertDialogContent>
+          <AlertDialogHeader fontSize='xx-large'>You won!!!🥳🥳🥳🥳</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+              Come back tomorrow for a new word.
+          </AlertDialogBody>
+          <AlertDialogFooter>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+    <VStack>
+    <Heading bgGradient='linear(to-r, red.100, yellow.300)' bgClip='text'>Wordy</Heading>
       {PastTries}
     </VStack>
+    </>
   )
 }

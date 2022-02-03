@@ -4,7 +4,7 @@ import {
   theme,
   Center
 } from '@chakra-ui/react'
-import { ColorModeSwitcher } from './ColorModeSwitcher'
+// import { ColorModeSwitcher } from './ColorModeSwitcher'
 import WordPad from './components/WordPad'
 
 export const App = () => (

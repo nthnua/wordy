@@ -1,8 +1,7 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Heading, HStack, PinInput, PinInputField, useDisclosure, useToast, VStack } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Heading, HStack, PinInput, PinInputField, useDisclosure, useToast, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-
-export default function WordPad() {
+export default function WordPad () {
   type letterType = 'correct' | 'incorrect' | 'unknown' | 'existent'
   interface Letter {
     value: string
@@ -10,11 +9,11 @@ export default function WordPad() {
   }
   type gameStatus = 'won' | 'playing' | 'lost'
   type Word = Letter[]
-  const noOfTries = 5
+  // const noOfTries = 5
   const toast = useToast()
-  const [gameState,setGameState] = useState<gameStatus>('playing')
-  const [wordList,setWordList] = useState<string[]>([])
-  const [correctWord,setCorrectWord] = useState<string>('')
+  // const [gameState,setGameState] = useState<gameStatus>('playing')
+  const [wordList, setWordList] = useState<string[]>([])
+  const [correctWord, setCorrectWord] = useState<string>('')
   const [currentTry, setCurrentTry] = useState<number>(0)
   const wordLength = 5
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -35,39 +34,38 @@ export default function WordPad() {
     word.forEach(({ value }) => { w = w + value })
     return (
       <HStack key={indx}>
-        <PinInput size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
+        <PinInput
+          size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
-            if (word.length === wordLength && word!==correctWord) {
-              if(wordList.includes(word)){
+            if (word.length === wordLength && word !== correctWord) {
+              if (wordList.includes(word)) {
                 const procWord: Word = word.split('').map((letter, indx) => ({
                   value: letter,
                   status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
-              }))
-              let updWords: Word[] = [...triedWords]
-              updWords[currentTry] = procWord
-              setTriedWords([...updWords, initialLetters])
-              setCurrentTry(currentTry + 1)
-              }
-              else{
+                }))
+                const updWords: Word[] = [...triedWords]
+                updWords[currentTry] = procWord
+                setTriedWords([...updWords, initialLetters])
+                setCurrentTry(currentTry + 1)
+              } else {
                 toast.closeAll()
                 toast({
-                  variant:'subtle',
-                  description:'Word not in the list😕',
-                  status:'warning',
+                  variant: 'subtle',
+                  description: 'Word not in the list😕',
+                  status: 'warning',
                   duration: 1000
                 })
               }
-            }
-            else if(word===correctWord){
+            } else if (word === correctWord) {
               const procWord: Word = word.split('').map((letter, indx) => ({
                 value: letter,
                 status: (correctWord[indx] === letter && 'correct') || (correctWord.includes(letter) && 'existent') || 'incorrect'
-            }))
-            let updWords: Word[] = [...triedWords]
-            updWords[currentTry] = procWord
-            setTriedWords([...updWords])
-            setCurrentTry(-1)
-            onOpen()
+              }))
+              const updWords: Word[] = [...triedWords]
+              updWords[currentTry] = procWord
+              setTriedWords([...updWords])
+              setCurrentTry(-1)
+              onOpen()
             }
           }}
         >
@@ -77,33 +75,32 @@ export default function WordPad() {
     )
   }
   )
-  useEffect(()=>{
-    fetch('words.txt').then((t)=>t.text().then((wordsTxt)=>{
+  useEffect(() => {
+    fetch('words.txt').then(async (t) => await t.text().then((wordsTxt) => {
       setWordList(wordsTxt.split('\n'))
-    })).catch(err=>console.error(err))
-  },[])
-  useEffect(()=>{
-    const index = Math.floor(Math.random()*3427)
+    })).catch(err => console.error(err))
+  }, [])
+  useEffect(() => {
+    const index = Math.floor(Math.random() * 3427)
     setCorrectWord(wordList[index])
-  },[wordList])
+  }, [wordList])
   return (
     <>
-    <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>
-    <AlertDialogOverlay />
-    <AlertDialogContent>
+      <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>
+        <AlertDialogOverlay />
+        <AlertDialogContent>
           <AlertDialogHeader fontSize='xx-large'>You won!!!🥳🥳🥳🥳</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-              Come back tomorrow for a new word.
+            Come back tomorrow for a new word.
           </AlertDialogBody>
-          <AlertDialogFooter>
-          </AlertDialogFooter>
+          <AlertDialogFooter />
         </AlertDialogContent>
-    </AlertDialog>
-    <VStack>
-    <Heading bgGradient='linear(to-r, red.100, yellow.300)' bgClip='text'>Wordy</Heading>
-      {PastTries}
-    </VStack>
+      </AlertDialog>
+      <VStack>
+        <Heading bgGradient='linear(to-r, red.100, yellow.300)' bgClip='text'>Wordy</Heading>
+        {PastTries}
+      </VStack>
     </>
   )
 }

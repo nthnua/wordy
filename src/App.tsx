@@ -7,7 +7,7 @@ import {
 // import { ColorModeSwitcher } from './ColorModeSwitcher'
 import WordPad from './components/WordPad'
 
-export const App = () => (
+export const App = (): JSX.Element => (
   <ChakraProvider theme={theme}>
     <Center minH='100vh' py='24'>
       <WordPad />

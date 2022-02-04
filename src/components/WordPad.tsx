@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Heading, HStack, PinInput, PinInputField, Text, useDisclosure, useToast, VStack } from '@chakra-ui/react'
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Heading, HStack, PinInput, PinInputField, ScaleFade, SlideFade, Text, useDisclosure, useToast, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 export default function WordPad () {
@@ -16,7 +16,9 @@ export default function WordPad () {
   const [correctWord, setCorrectWord] = useState<string>('')
   const [currentTry, setCurrentTry] = useState<number>(0)
   const wordLength = 5
+  // for modal
   const { isOpen, onOpen, onClose } = useDisclosure()
+  // for new elements
   // colormap
   const colorCode = {
     correct: 'green.200',
@@ -33,7 +35,8 @@ export default function WordPad () {
     let w = ''
     word.forEach(({ value }) => { w = w + value })
     return (
-      <HStack key={indx}>
+      <SlideFade key={indx} offsetY='60px' in={true}>
+      <HStack >
         <PinInput
           size='lg' isDisabled={indx !== currentTry} autoFocus={indx === currentTry} type='alphanumeric' value={(indx !== currentTry && w) || undefined}
           onComplete={(word: string) => {
@@ -73,6 +76,7 @@ export default function WordPad () {
           {word.map((letter, indx) => <PinInputField key={indx} bg={colorCode[letter.status]} />)}
         </PinInput>
       </HStack>
+      </SlideFade>
     )
   }
   )
@@ -84,13 +88,13 @@ export default function WordPad () {
   useEffect(() => {
     if(wordList.length){
       const index = Math.floor(Math.random() * 3427)
-      //setCorrectWord(wordList[index])
-      setCorrectWord('HELLO')
+      setCorrectWord(wordList[index])
+      //setCorrectWord('HELLO')
     }
   }, [wordList])
   return (
     <>
-      <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={undefined}>
+      <AlertDialog isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom' isCentered size='xl' leastDestructiveRef={undefined}>
         <AlertDialogOverlay />
         <AlertDialogContent>
           <AlertDialogHeader fontSize='xx-large'>You won!!!🥳🥳🥳🥳

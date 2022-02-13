@@ -48,44 +48,41 @@ export default function WordPad () {
       const updWords: Word[] = [...triedWords]
       updWords[currentTry] = procWord
       setTriedWords([...updWords])
-        const index = Math.floor(Math.random() * 3427)
-        setCorrectWord(wordList[index])
-         //setCorrectWord('HELLO')
+      const index = Math.floor(Math.random() * 3427)
+      setCorrectWord(wordList[index])
+      // setCorrectWord('HELLO')
       setCurrentTry(-1)
       setGameState('won')
-      localStorage.setItem('data',JSON.stringify({
+      localStorage.setItem('data', JSON.stringify({
         time: Date.now(),
-        triedWords:updWords,
+        triedWords: updWords,
         correctWord,
-        gameState:'won'
+        gameState: 'won'
       }))
     }
   }
   const PastTries = triedWords.map((word: Word, indx: number) => <WordRow indx={indx} word={word} currentTry={currentTry} handleComplete={handleComplete} />)
-  useEffect(()=>{
-    if(gameState==='won')
-    {
+  useEffect(() => {
+    if (gameState === 'won') {
       onOpen()
-    }
-    else if(gameState==='playing' && triedWords.length>1){
-      localStorage.setItem('data',JSON.stringify({
+    } else if (gameState === 'playing' && triedWords.length > 1) {
+      localStorage.setItem('data', JSON.stringify({
         time: Date.now(),
         triedWords,
         correctWord,
         gameState
       }))
     }
-  },[gameState,currentTry,correctWord,triedWords,onOpen])
+  }, [gameState, currentTry, correctWord, triedWords, onOpen])
   useEffect(() => {
     try {
       const storedData: StoredData = JSON.parse(localStorage.getItem('data') || '')
-      console.log('now:',new Date(Date.now()).toUTCString(),'\nsaved:',new Date(storedData.time).toUTCString(),'\ncomback at:', new Date(storedData.time+43200000).toUTCString())
-      if(Date.now()<storedData.time+43200000){
-        if(storedData.gameState==='won'){
+      console.log('now:', new Date(Date.now()).toUTCString(), '\nsaved:', new Date(storedData.time).toUTCString(), '\ncomback at:', new Date(storedData.time + 43200000).toUTCString())
+      if (Date.now() < storedData.time + 43200000) {
+        if (storedData.gameState === 'won') {
           setCurrentTry(-1)
-        }
-        else{
-          setCurrentTry(storedData.triedWords.length-1)
+        } else {
+          setCurrentTry(storedData.triedWords.length - 1)
         }
         setCorrectWord(storedData.correctWord)
         setGameState(storedData.gameState)
@@ -100,11 +97,11 @@ export default function WordPad () {
     })).catch(err => console.error(err))
   }, [])
   useEffect(() => {
-    if(wordList.length>0 && !correctWord){
+    if (wordList.length > 0 && !correctWord) {
       const index = Math.floor(Math.random() * 3427)
       setCorrectWord(wordList[index])
     }
-  }, [wordList])
+  }, [wordList, correctWord])
   return (
     <><WinDialog isOpen={isOpen} onOpen={onOpen} onClose={onClose} noOfTries={triedWords.length} />
       <VStack>

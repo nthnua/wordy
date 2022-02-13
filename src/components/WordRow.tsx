@@ -1,5 +1,5 @@
 import { HStack, PinInput, PinInputField, SlideFade } from '@chakra-ui/react'
-import { Letter, Word } from './types'
+import { Word } from './types'
 
 export default function WordRow ({ indx, word, currentTry, handleComplete }: {indx: number, word: Word, currentTry: number, handleComplete: (word: string) => void}) {
   const colorCode = {
